@@ -1,2 +1,2 @@
-# ReflowController
+# AVRReflowController
 Software for a simple oven reflow controller
