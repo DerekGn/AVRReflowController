@@ -27,6 +27,7 @@
 static volatile bool recalc_pid = 0;
 
 typedef struct _ReflowContext {
+	uint16_t profile_time;
 	uint16_t reflow_timer;
 	uint16_t target_temp;
 	uint16_t tc_temp;
@@ -56,7 +57,7 @@ ProfileStage MapProfileStage(ProfileState profileState, ReflowContext ctx) {
 	
 	ProfileStage profileStage;
 
-	profileStage.ReflowTimer = ctx.reflow_timer;
+	profileStage.ReflowTimer = ctx.profile_time;
 	profileStage.State = (ProfileStage_ProfileStageState)profileState;
 	profileStage.TargetTemp = ctx.target_temp;
 	profileStage.TcTemp = ctx.tc_temp;
@@ -79,7 +80,8 @@ static void Handle_Timer_Overflow()
 ReflowProfile MapFromProfile(Profile profile) {
 	
 	ReflowProfile reflow_profile;
-
+	
+	reflow_profile.Preheat = profile.pre_heat;
 	reflow_profile.CoolRate = profile.cool_rate;
 	reflow_profile.PeakTemp = profile.peak_temp;
 	reflow_profile.SoakLen = profile.soak_length;
@@ -95,6 +97,7 @@ Profile MapToProfile(ReflowProfile reflow_profile) {
 	
 	Profile profile;
 
+	profile.pre_heat = reflow_profile.Preheat;
 	profile.cool_rate = reflow_profile.CoolRate;
 	profile.peak_temp = reflow_profile.PeakTemp;
 	profile.soak_length = reflow_profile.SoakLen;
@@ -115,14 +118,17 @@ void Execute(Request request, Response *response, ReflowContext *context) {
 			
 			if(Get_Profile_State() == STOP) {
 				response->Type = Response_ResponseType_STARTPROFILE;
-			
-				Set_Profile_State(START);
+				 
+				uint16_t start_temp = Get_TC_Temp();
+				Set_Profile_Start(start_temp);
 
 				context->reflow_timer = 0;
-				context->tc_temp = Get_TC_Temp();
+				context->profile_time = 0;
+				context->tc_temp = start_temp;
 				context->target_temp = Get_Profile_Target_Temp(context->tc_temp, &context->reflow_timer);
 				context->reflow_timer++;
-			
+				context->profile_time++;
+				
 				Setup_Timer_Counter1_PWM(&Handle_Timer_Overflow, TOP_MAX);
 			
 				Start_Timer_Counter1(TOP_MAX);
@@ -134,7 +140,7 @@ void Execute(Request request, Response *response, ReflowContext *context) {
 		case Request_RequestType_STOPPROFILE:
 			if(Get_Profile_State() != STOP) {
 				response->Type = Response_ResponseType_STOPPROFILE;
-				Set_Profile_State(STOP);
+				Set_Profile_Stop();
 				Restore_Timer_Counter1();
 				Set_Relay_State(false);
 			}
@@ -181,7 +187,6 @@ void Execute(Request request, Response *response, ReflowContext *context) {
 		break;
 	}
 }
-
 
 void CDCTask() {
 	
@@ -246,12 +251,15 @@ int main(void)
 				// Toggle the LED while running profile
 				PORTD  ^= (1 << PORTD6);
 				ctx.update = 0;
+				ctx.tc_temp = Get_TC_Temp();
 				ctx.target_temp = Get_Profile_Target_Temp(ctx.tc_temp, &ctx.reflow_timer);
 				ctx.reflow_timer++;
+				ctx.profile_time++;
 			}
-			ctx.tc_temp = Get_TC_Temp();
-			recalc_pid = 0;
+			
 			OCR1A = pid(ctx.target_temp, ctx.tc_temp, TOP_MAX);
+
+			recalc_pid = 0;
 		}
 	}
 }

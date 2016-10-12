@@ -35,6 +35,7 @@
 */
 typedef struct _Profile
 {
+	uint16_t pre_heat;		// The pre heat in °C
 	uint16_t start_rate;	// The ramp to soak rate in °C per second
 	uint16_t soak_temp1;	// The start preheat/soak temperature
 	uint16_t soak_temp2;	// The end preheat/soak temperature
@@ -50,12 +51,12 @@ typedef struct _Profile
 */
 typedef enum _ProfileState
 {
-	INIT = 0,			// The initial undefined state
-	STOP = 1,			// The profile has entered stopped state
-	START = 2,			// The profile has started
-	SOAK = 3,			// The profile is in soak stage
-	PEAK = 4,			// The profile is in peak
-	COOL = 5			// The profile is in cool down
+	STOP	= 0,		// The profile has entered stopped state
+	START	= 1,		// The profile has started
+	SOAK	= 2,		// The profile is in soak stage
+	PEAK	= 3,		// The profile is in peak
+	COOL	= 4,		// The profile is in cool down
+	PREHEAT	= 5,		// The profile has entered preheat phase
 } ProfileState;
 
 /**
@@ -101,13 +102,8 @@ void Init_Profile();
 */
 ProfileState Get_Profile_State();
 
-/**
-* \brief Set the current profile stage
-*
-* \param profile_state The profile state to set
-*
-* \return void
-*/
-void Set_Profile_State(ProfileState profile_state);
+void Set_Profile_Start(uint16_t start_temp);
+
+void Set_Profile_Stop();
 
 #endif

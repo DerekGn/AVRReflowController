@@ -27,16 +27,9 @@
 #include <util/delay.h>
 
 #define DDR_SPI DDRB
-#define DD_MOSI PINB2
+#define DD_MISO PINB3
 #define DD_SCK	PINB1
 #define SS_PIN	PINB0
-
-#define AVERAGE_BITS 2
-#define AVERAGE (1<<AVERAGE_BITS)
-
-static volatile int16_t tcstate;
-
-int16_t temps[AVERAGE];
 
 static void SetSS(uint8_t ss) {
 	
@@ -48,11 +41,9 @@ static void SetSS(uint8_t ss) {
 
 void TC_Setup() {
 	
-	DDRB |= (1 << SS_PIN);
-
-	DDR_SPI = (1 << DD_MOSI) | (1 << DD_SCK);
+	DDR_SPI = (1 << SS_PIN) | (1 << DD_SCK) ;
 	
-	SPCR = (1 << SPE) | (1 << MSTR);
+	SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0);
 	
 	SetSS(1);
 	_delay_us(100);
@@ -83,23 +74,6 @@ uint16_t Get_TC_State() {
 }
 
 uint16_t Get_TC_Temp() {
-	
-	int16_t result;
-	int16_t avg;
-
-	result = Get_TC_State() >> 3;
-
-	// average
-	avg = result;
-	for(uint8_t i=1; i<AVERAGE; ++i)
-	{
-		temps[i] = temps[i-1];
-		avg += temps[i];
-	}
-	temps[0] = result;
-
-	avg >>= AVERAGE_BITS;
-
-	return avg;
+	return Get_TC_State() >> 3;
 }
 

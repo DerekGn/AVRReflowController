@@ -27,18 +27,15 @@
 
 #include <avr/eeprom.h>
 
-#define START_TEMP_MIN 20
-#define STOP_TEMP_MIN 40
-
 static ProfileState reflow_state;
-static uint16_t prev_target = 0;
-static int16_t integral = 0;
+static uint16_t profile_start_temp;
 static Profile profile;
 
 static Profile EEMEM eeprom_profile = {
+	.pre_heat = 40,
 	.start_rate = 4,
-	.soak_temp1 = 400,
-	.soak_temp2 = 440,
+	.soak_temp1 = 600,
+	.soak_temp2 = 720,
 	.soak_length = 100,
 	.peak_temp = 800,
 	.time_to_peak = 80,
@@ -48,57 +45,69 @@ static Profile EEMEM eeprom_profile = {
 uint16_t Get_Profile_Target_Temp(uint16_t temp, uint16_t *timer) {
 	
 	uint16_t target = 0;
-	switch(reflow_state)
+	switch (reflow_state)
 	{
-		case(STOP):
+		case STOP:
 			target = 0;
 			reflow_state = STOP;
 		break;
-		case(START):
-			target = prev_target + profile.start_rate;
-			target = CLAMP(target, START_TEMP_MIN, MIN(profile.soak_temp1,temp+profile.start_rate*5));
+		case PREHEAT:
+			target = profile.pre_heat;
 			
-			if (temp > profile.soak_temp1 - 4*5) {
+			if (temp >= profile.pre_heat) {
+				*timer = 0;
+				reflow_state = START;
+			}
+		break;
+		case START:
+			target = profile.pre_heat + (profile.start_rate * *timer);
+
+			if (target > profile.soak_temp1) {
+				target = profile.soak_temp1;
+			}
+
+			if (temp >= profile.soak_temp1) {
 				*timer = 0;
 				reflow_state = SOAK;
 			}
 		break;
-		case(SOAK):
-			if ( (*timer) < profile.soak_length) {
-				target = profile.soak_temp1 + ((*timer)*(profile.soak_temp2-profile.soak_temp1))/profile.soak_length;
-			} else {
+		case SOAK:
+			if ((*timer) < profile.soak_length) {
+				target = profile.soak_temp1 + ((*timer)*(profile.soak_temp2 - profile.soak_temp1)) / profile.soak_length;
+			}
+			else {
 				target = profile.soak_temp2;
-				if (temp > profile.soak_temp2 - 4*10) {
+				if (temp >= profile.soak_temp2) {
 					*timer = 0;
 					reflow_state = PEAK;
 				}
 			}
 		break;
-		case(PEAK):
-			if ( (*timer) < profile.time_to_peak) {
+		case PEAK:
+			if ((*timer) < profile.time_to_peak) {
 				target = profile.soak_temp2 +
-				((*timer)*(profile.peak_temp-profile.soak_temp2))/profile.time_to_peak;
-			} else {
+				((*timer)*(profile.peak_temp - profile.soak_temp2)) / profile.time_to_peak;
+			}
+			else {
 				target = profile.peak_temp;
-				if (temp > target) {
+				if (temp >= target) {
 					*timer = 0;
-					integral = 0;
+				
 					reflow_state = COOL;
 				}
 			}
 		break;
-		case(COOL):
-			target = prev_target-profile.cool_rate;
-		
-			if (target < STOP_TEMP_MIN)
+		case COOL:
+			target = profile.peak_temp - (profile.cool_rate * *timer);
+
+			if (target <= profile_start_temp)
 				reflow_state = STOP;
+
 		break;
 		default:
 			reflow_state = STOP;
 		break;
 	}
-	
-	prev_target = target;
 	
 	return target;
 }
@@ -122,8 +131,13 @@ ProfileState Get_Profile_State()
 	return reflow_state;
 }
 
-void Set_Profile_State(ProfileState profile_state)
+void Set_Profile_Start(uint16_t start_temp)
 {
-	reflow_state = profile_state;
+	reflow_state = PREHEAT;
+	profile_start_temp = start_temp;
 }
 
+void Set_Profile_Stop()
+{
+	reflow_state = STOP;
+}

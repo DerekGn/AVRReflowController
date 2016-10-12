@@ -3,15 +3,16 @@ syntax = "proto2";
 message Request {
 
 	enum RequestType {
-		STARTPROFILE							= 0;	// Start oven profile cycle
-		STOPPROFILE								= 1;	// Stop oven profile cycle
-		GETPROFILESTAGE							= 2;	// Get the current reflow profile stage
-		GETPROFILE								= 3;	// Get the current reflow profile from the device
-		SETPROFILE								= 4;	// Set the current reflow profile on the device and store to eeprom
-		TCSTATE									= 5;	// Read raw thermocouple state from MAX6675
-		RELAYON									= 6;	// Switch on the relay
-		RELAYOFF								= 7;	// Switch off the relay
-		PING									= 8;	// Ping the device
+		NONE									= 0;
+		STARTPROFILE							= 1;	// Start oven profile cycle
+		STOPPROFILE								= 2;	// Stop oven profile cycle
+		GETPROFILESTAGE							= 3;	// Get the current reflow profile stage
+		GETPROFILE								= 4;	// Get the current reflow profile from the device
+		SETPROFILE								= 5;	// Set the current reflow profile on the device and store to eeprom
+		TCSTATE									= 6;	// Read raw thermocouple state from MAX6675
+		RELAYON									= 7;	// Switch on the relay
+		RELAYOFF								= 8;	// Switch off the relay
+		PING									= 9;	// Ping the device
 	}
 
 	required RequestType Command				= 1;
@@ -26,6 +27,7 @@ message ReflowProfile {
 	required int32 PeakTemp						= 5;	// The peak temperature
 	required int32 TimeToPeak					= 6;	// The amount of time to 
 	required int32 CoolRate						= 7;	// The cool rate in C second
+	required int32 Preheat						= 8;	// The pre heat threshold in C
 }
 
 message ProfileStage {
@@ -36,6 +38,7 @@ message ProfileStage {
 		SOAK 									= 2;	// The reflow profile is in soak phase
 		PEAK 									= 3;	// The reflow profile has entered peak phase
 		COOL 									= 4;	// The reflow profile is in cooldown phase
+		PREHEAT									= 5;	// The reflow profile is in preheat phase
 	}
 	
 	required ProfileStageState	State			= 1;	// The current reflow profile state
