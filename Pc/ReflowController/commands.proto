@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+message Request {
+
+	enum RequestType {
+		NONE									= 0;
+		STARTPROFILE							= 1;	// Start oven profile cycle
+		STOPPROFILE								= 2;	// Stop oven profile cycle
+		GETPROFILESTAGE							= 3;	// Get the current reflow profile stage
+		GETPROFILE								= 4;	// Get the current reflow profile from the device
+		SETPROFILE								= 5;	// Set the current reflow profile on the device and store to eeprom
+		TCSTATE									= 6;	// Read raw thermocouple state from MAX6675
+		RELAYON									= 7;	// Switch on the relay
+		RELAYOFF								= 8;	// Switch off the relay
+		PING									= 9;	// Ping the device
+	}
+
+	RequestType Command							= 1;
+	ReflowProfile Profile						= 2;
+}
+
+message ReflowProfile {
+	int32 StartRate								= 1;	// The heatup rate for the profile in C second
+	int32 SoakTemp1								= 2;	// The first soak temperature 
+	int32 SoakTemp2								= 3;	// The second saok temperature
+	int32 SoakLen								= 4;	// The amount of time in seconds between the first and second soak
+	int32 PeakTemp								= 5;	// The peak temperature
+	int32 TimeToPeak							= 6;	// The amount of time to 
+	int32 CoolRate								= 7;	// The cool rate in C second
+	int32 Preheat								= 8;	// The pre heat threshold in C
+}
+
+message ProfileStage {
+	
+	enum ProfileStageState {
+		STOP 									= 0;	// The reflow profile has stopped
+		START 									= 1;	// The reflow profile has started
+		SOAK 									= 2;	// The reflow profile is in soak phase
+		PEAK 									= 3;	// The reflow profile has entered peak phase
+		COOL 									= 4;	// The reflow profile is in cooldown phase
+		PREHEAT									= 5;	// The reflow profile is in preheat phase
+	}
+	
+	ProfileStageState	State					= 1;	// The current reflow profile state
+	int32 				ReflowTimer				= 2;	// The current reflow profile time in seconds
+	int32 				TargetTemp				= 3;	// The calculated target temperature
+	int32 				TcTemp					= 4;	// The thermocouple temperature
+};
+
+message Response {
+
+	enum ResultType {
+		SUCCESS									= 0;	// Indicates a sucessful command execution
+		FAIL									= 1;	// Indicates a failure during command execution
+	}
+
+	enum ResponseType {
+		
+		STARTPROFILE							= 0;	// Start oven profile cycle
+		STOPPROFILE								= 1;	// Stop oven profile cycle
+		GETPROFILESTAGE							= 2;	// Get the current profiles state
+		GETPROFILE								= 3;	// Get the devices currently defined profile
+		SETPROFILE								= 4;	// Sets the devices current profile
+		TCSTATE									= 5;	// Read raw thermocouple state from MAX6675
+		RELAYON									= 6;	// Switch on the relay
+		RELAYOFF								= 7;	// Switch off the relay
+		PING									= 8;	// Pings the device
+	}
+
+	enum CycleStatus {
+		RUNNING									= 0;	// Oven profile cycle running
+		STOPPED									= 1;	// Oven profile cycle stopped
+		FINISHED								= 2;	// Oven profile cycle finished
+	}
+
+	enum ErrorCodeType {
+		UNKNOWNCOMMAND							= 0;	// Indicates that the reflow controller could not determine the command
+		DECODEFAILED							= 1;	// Indicates that the decode  of the Request message failed
+		PROFILERUNNING							= 2;	// Indicates that the profile is running so command cannot be executed
+	}
+
+	ResultType		Result						= 1;
+	ResponseType	Type						= 2;
+	
+	oneof payload  {
+		int32			TcState					= 3;	// The raw state of the thermocouple
+		ProfileStage	Stage					= 4;	// The current Profile stage
+		ErrorCodeType	ErrorCode				= 5;	// The error code
+		ReflowProfile	Profile					= 6;	// The reflow profile
+	}
+};
