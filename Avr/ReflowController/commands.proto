@@ -13,10 +13,19 @@ message Request {
 		RELAYON									= 7;	// Switch on the relay
 		RELAYOFF								= 8;	// Switch off the relay
 		PING									= 9;	// Ping the device
+		SETPID									=10;	// Set the PID values
+		GETPID									=11;	// Get the PID values
 	}
 
 	required RequestType Command				= 1;
 	optional ReflowProfile Profile				= 2;
+	optional Pid PidGains						= 3;
+}
+
+message Pid {
+	required int32 kp							= 1;	// p gain 
+	required int32 ki							= 2;	// i gain
+	required int32 kd							= 3;	// d gain
 }
 
 message ReflowProfile {
@@ -55,7 +64,6 @@ message Response {
 	}
 
 	enum ResponseType {
-		
 		STARTPROFILE							= 0;	// Start oven profile cycle
 		STOPPROFILE								= 1;	// Stop oven profile cycle
 		GETPROFILESTAGE							= 2;	// Get the current profiles state
@@ -65,6 +73,8 @@ message Response {
 		RELAYON									= 6;	// Switch on the relay
 		RELAYOFF								= 7;	// Switch off the relay
 		PING									= 8;	// Pings the device
+		SETPID									=10;	// Set the PID values
+		GETPID									=11;	// Get the PID values
 	}
 
 	enum CycleStatus {
@@ -77,6 +87,7 @@ message Response {
 		UNKNOWNCOMMAND							= 0;	// Indicates that the reflow controller could not determine the command
 		DECODEFAILED							= 1;	// Indicates that the decode  of the Request message failed
 		PROFILERUNNING							= 2;	// Indicates that the profile is running so command cannot be executed
+		OVENABOVETEMP							= 3;	// Indicates that the is too hot to start the cycle
 	}
 
 	required ResultType		Result				= 1;
@@ -87,5 +98,6 @@ message Response {
 		ProfileStage	Stage					= 4;	// The current Profile stage
 		ErrorCodeType	ErrorCode				= 5;	// The error code
 		ReflowProfile	Profile					= 6;	// The reflow profile
+		Pid				PidGains				= 7;	// The pid gains
 	}
 };

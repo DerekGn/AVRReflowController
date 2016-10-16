@@ -24,22 +24,18 @@ namespace ReflowController
 
             return new ThermoCoupleStatus(temp, isOpen);
         }
-        
         public void Ping()
         {
             SendRequest(new Request() { Command = Request.Types.RequestType.Ping });
         }
-
         public void SetRelayState(bool state)
         {
             SendRequest(new Request() { Command = state ? Request.Types.RequestType.Relayon : Request.Types.RequestType.Relayoff });
         }
-
         public void StartProfile()
         {
             SendRequest(new Request() { Command = Request.Types.RequestType.Startprofile });
         }
-
         public void StopProfile()
         {
             SendRequest(new Request() { Command = Request.Types.RequestType.Stopprofile });
@@ -52,12 +48,18 @@ namespace ReflowController
         {
             return SendRequest(new Request() { Command = Request.Types.RequestType.Getprofile }).Profile;
         }
-
         public void SetReflowProfile(ReflowProfile reflowProfile)
         {
             SendRequest(new Request() { Command = Request.Types.RequestType.Setprofile, Profile = reflowProfile });
         }
-
+        public Pid GetPid()
+        {
+            return SendRequest(new Request() { Command = Request.Types.RequestType.Getpid }).PidGains;
+        }
+        public void SetPid(Pid pid)
+        {
+            SendRequest(new Request() { Command = Request.Types.RequestType.Setpid, PidGains = pid });
+        }
         public void Open(string port)
         {
             if (!SerialPortStream.GetPortNames().Contains(port))
@@ -73,7 +75,6 @@ namespace ReflowController
             else
                 throw new ReflowControllerException("Device aplready open");
         }
-        
         public void Close()
         {
             lock (_lock)
@@ -86,7 +87,6 @@ namespace ReflowController
                 }
             }
         }
-        
         private Response SendRequest(Request request)
         {
             lock(_lock)
@@ -117,7 +117,6 @@ namespace ReflowController
                 return response;
             }
         }
-
         private Response Deserialise(byte[] readBuffer, int readLen)
         {
             using (MemoryStream stream = new MemoryStream())
@@ -128,28 +127,23 @@ namespace ReflowController
                 return Response.Parser.ParseFrom(stream);
             }
         }
-
         private void ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {
             _lastError = e.EventType;
         }
-
         private void DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             _serialData = e.EventType;
         }
-
         private void PinChanged(object sender, SerialPinChangedEventArgs e)
         {
         }
-
         #region IDisposable
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -157,7 +151,6 @@ namespace ReflowController
                 Close();
             }
         }
-
         #endregion
     }
 }

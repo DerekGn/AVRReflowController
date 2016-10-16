@@ -23,7 +23,6 @@
 */
 
 #include "profile.h"
-#include "shared.h"
 
 #include <avr/eeprom.h>
 
@@ -131,10 +130,9 @@ ProfileState Get_Profile_State()
 	return reflow_state;
 }
 
-void Set_Profile_Start(uint16_t start_temp)
+void Set_Profile_Start()
 {
 	reflow_state = PREHEAT;
-	profile_start_temp = start_temp;
 }
 
 void Set_Profile_Stop()

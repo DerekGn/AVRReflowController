@@ -31,6 +31,11 @@
 #define DD_SCK	PINB1
 #define SS_PIN	PINB0
 
+#define AVERAGE_BITS 2
+#define AVERAGE (1<<AVERAGE_BITS)
+
+int16_t temps[AVERAGE];
+
 static void SetSS(uint8_t ss) {
 	
 	if(ss)
@@ -74,6 +79,21 @@ uint16_t Get_TC_State() {
 }
 
 uint16_t Get_TC_Temp() {
-	return Get_TC_State() >> 3;
+	int16_t result;
+	int16_t avg;
+
+	result = Get_TC_State() >> 3;
+	avg = result;
+	for(uint8_t i = 1; i < AVERAGE; ++i)
+	{
+		temps[i] = temps[i-1];
+		avg += temps[i];
+	}
+
+	temps[0] = result;
+
+	avg >>= AVERAGE_BITS;
+
+	return avg;
 }
 

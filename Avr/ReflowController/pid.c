@@ -23,53 +23,91 @@
 */
 
 #include "pid.h"
-#include "shared.h"
 
-#define MAXTEMP 340
+#include <avr/eeprom.h>
+#include <string.h>
 
-#define PID_P 360;
-#define PID_I 80;
-#define PID_D 0;
+#define DIV 8
+#define DELAY 40
 
-static int16_t last_error = 0;
-static int16_t integral = 0;
+typedef struct _PidData {
+	int16_t pid_prev[DELAY]; // previous temperatures (0.25C units)
+	uint8_t pid_prev_index;
+	int16_t last_error;
+	int16_t integral;
+	PidGains gains;
+} PidData;
 
-static uint16_t Approximate_PWM(uint16_t target, uint16_t max_top) {
-	int32_t t;
+static PidGains EEMEM eeprom_pid_gains = {
+	.kp = 13,
+	.ki = 3,
+	.kd = 13
+};
+
+static PidData pidData;
+
+int16_t Pid_Prev_Update(int16_t prev)
+{
+	int16_t popped = pidData.pid_prev[pidData.pid_prev_index];
+	pidData.pid_prev[pidData.pid_prev_index] = prev;
+
+	pidData.pid_prev_index++;
 	
-	t = ((max_top * target) / (MAXTEMP*4));
+	if(pidData.pid_prev_index >= DELAY)
+		pidData.pid_prev_index = 0;
 
-	return (uint16_t) CLAMP(t, 0, max_top);
+	return popped;
 }
 
-uint16_t pid(uint16_t target_temp, uint16_t current_temp, uint16_t max_top) {
+void Init_Pid() {
+	eeprom_read_block(&pidData.gains, &eeprom_pid_gains, sizeof(PidGains));
+}
+
+void Reset_Pid() {
 	
-	int32_t error = (int32_t)target_temp - (int32_t)current_temp;
+	memset(&pidData.pid_prev, 0, DELAY);
 
-	if (target_temp == 0) {
-		integral = 0;
-		last_error = error;
-		return 0;
-	} else {
+	pidData.pid_prev_index = 0;
+	pidData.integral = 0;
+	pidData.last_error = 0;
+}
 
-		int32_t p_term = error * PID_P;
-		int32_t i_term = integral * PID_I;
-		int32_t d_term = (last_error - error) * PID_D;
+void Set_Pid(PidGains new_pid_gains)
+{
+	memcpy(&pidData.gains, &new_pid_gains, sizeof(PidGains));
+	eeprom_update_block(&pidData.gains, &eeprom_pid_gains, sizeof(PidGains));
+}
 
-		int16_t new_integral = integral + error;
-		/* Clamp integral to a reasonable value */
-		new_integral = CLAMP(new_integral, -4 * 100, 4 * 100);
+PidGains Get_Pid()
+{
+	return pidData.gains;
+}
 
-		last_error = error;
+uint16_t Update_Pid(int16_t target_temp, int16_t current_temp, uint16_t max_out) {
+	int16_t error, derivative;
+	int32_t pwm;
 
-		int32_t result = Approximate_PWM(target_temp, max_top) + p_term + i_term + d_term;
+	// calculate terms
+	error       = target_temp - current_temp; // error term must be positive when we're ramping up
+	derivative  = Pid_Prev_Update(current_temp) - current_temp; // derivative term must be negative when we're ramping up
 
-		/* Avoid integral buildup */
-		if ((result >= max_top && new_integral < integral) || (result < 0 && new_integral > integral) || (result <= max_top && result >= 0)) {
-			integral = new_integral;
-		}
+	// sum weighted terms
+	pwm = ((int32_t)error) << pidData.gains.kp;
+	pwm += ((int32_t)pidData.integral) << pidData.gains.ki;
+	pwm += ((int32_t)derivative) << pidData.gains.kd;
 
-		/* Clamp the output value */
-		return (uint16_t)(CLAMP(result, 0, max_top));
-	}
+	// post-divide
+	pwm >>= DIV;
+
+	// only update integral if output is not saturated (or if change would reduce saturation)
+	if( (pwm >= 0 && pwm <= max_out) || (pwm > 0 && error < 0) || (pwm < 0 && error > 0) )
+		pidData.integral += error;
+
+	// limit command
+	if(pwm < 0)
+		pwm = 0;
+	else if(pwm > max_out)
+		pwm = max_out;
+
+	return (uint16_t) pwm;
 }

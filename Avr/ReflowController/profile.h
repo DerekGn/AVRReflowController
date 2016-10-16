@@ -102,7 +102,7 @@ void Init_Profile();
 */
 ProfileState Get_Profile_State();
 
-void Set_Profile_Start(uint16_t start_temp);
+void Set_Profile_Start();
 
 void Set_Profile_Stop();
 

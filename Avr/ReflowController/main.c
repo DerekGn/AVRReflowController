@@ -37,21 +37,28 @@ typedef struct _ReflowContext {
 uint8_t buffer[CDC_TXRX_EPSIZE];
 
 /** Contains the current baud rate and other settings of the virtual serial port. While this demo does not use
- *  the physical USART and thus does not use these settings, they must still be retained and returned to the host
- *  upon request or the host will assume the device is non-functional.
- *
- *  These values are set by the host via a class-specific request, however they are not required to be used accurately.
- *  It is possible to completely ignore these value or use other settings as the host is completely unaware of the physical
- *  serial link characteristics and instead sends and receives data in endpoint streams.
- */
+*  the physical USART and thus does not use these settings, they must still be retained and returned to the host
+*  upon request or the host will assume the device is non-functional.
+*
+*  These values are set by the host via a class-specific request, however they are not required to be used accurately.
+*  It is possible to completely ignore these value or use other settings as the host is completely unaware of the physical
+*  serial link characteristics and instead sends and receives data in endpoint streams.
+*/
 static CDC_LineEncoding_t LineEncoding = { .BaudRateBPS = 0,
-                                           .CharFormat  = CDC_LINEENCODING_OneStopBit,
-                                           .ParityType  = CDC_PARITY_None,
-                                           .DataBits    = 8};
+	.CharFormat  = CDC_LINEENCODING_OneStopBit,
+	.ParityType  = CDC_PARITY_None,
+.DataBits    = 8};
 
 ReflowContext ctx = { 0, 0, 0, 0};
 Response response;
 Request request;
+
+void Stop_Cycle()
+{
+	Set_Profile_Stop();
+	Restore_Timer_Counter1();
+	Set_Relay_State(false);
+}
 
 ProfileStage MapProfileStage(ProfileState profileState, ReflowContext ctx) {
 	
@@ -72,8 +79,7 @@ void SetErrorResponse(Response * response, Response_ErrorCodeType errorCode) {
 	response->payload.ErrorCode = errorCode;
 }
 
-static void Handle_Timer_Overflow()
-{
+static void Handle_Timer_Overflow() {
 	recalc_pid = 1;
 }
 
@@ -114,13 +120,21 @@ void Execute(Request request, Response *response, ReflowContext *context) {
 	response->Result = Response_ResultType_SUCCESS;
 
 	switch (request.Command) {
-		case Request_RequestType_STARTPROFILE:
+		case Request_RequestType_STARTPROFILE: {
 			
-			if(Get_Profile_State() == STOP) {
+			uint16_t start_temp;
+			
+			start_temp = Get_TC_Temp();
+
+			if(start_temp > Get_Profile().pre_heat)	{
+				SetErrorResponse(response, Response_ErrorCodeType_OVENABOVETEMP);
+			}
+			else if(Get_Profile_State() == STOP) {
 				response->Type = Response_ResponseType_STARTPROFILE;
-				 
-				uint16_t start_temp = Get_TC_Temp();
-				Set_Profile_Start(start_temp);
+				
+				Reset_Pid();
+
+				Set_Profile_Start();
 
 				context->reflow_timer = 0;
 				context->profile_time = 0;
@@ -130,58 +144,70 @@ void Execute(Request request, Response *response, ReflowContext *context) {
 				context->profile_time++;
 				
 				Setup_Timer_Counter1_PWM(&Handle_Timer_Overflow, TOP_MAX);
-			
+				
 				Start_Timer_Counter1(TOP_MAX);
 			}
-			else 
+			else
 				SetErrorResponse(response, Response_ErrorCodeType_PROFILERUNNING);
-			
-			break;
+		}
+		break;
 		case Request_RequestType_STOPPROFILE:
 			if(Get_Profile_State() != STOP) {
 				response->Type = Response_ResponseType_STOPPROFILE;
-				Set_Profile_Stop();
-				Restore_Timer_Counter1();
-				Set_Relay_State(false);
+				Stop_Cycle();
 			}
-			break;
+		break;
 		case Request_RequestType_GETPROFILESTAGE:
 			response->Type = Response_ResponseType_GETPROFILESTAGE;
 			response->which_payload = Response_Stage_tag;
 			response->payload.Stage = MapProfileStage(Get_Profile_State(), *context);
-			break;
+		break;
 		case Request_RequestType_GETPROFILE:
 			response->Type = Response_ResponseType_GETPROFILE;
 			response->which_payload = Response_Profile_tag;
 			response->payload.Profile = MapFromProfile(Get_Profile());
-			break;
+		break;
 		case Request_RequestType_SETPROFILE:
 			response->Type = Response_ResponseType_SETPROFILE;
 			Save_Profile(MapToProfile(request.Profile));
-			break;
+		break;
 		case Request_RequestType_TCSTATE:
 			response->Type = Response_ResponseType_TCSTATE;
-			
+		
 			if(Get_Profile_State() == STOP) {
 				response->payload.TcState = Get_TC_State();
 				response->which_payload = Response_TcState_tag;
 			}
-			else
-				SetErrorResponse(response, Response_ErrorCodeType_PROFILERUNNING);
-			
-			break;
+		else
+			SetErrorResponse(response, Response_ErrorCodeType_PROFILERUNNING);
+		
+		break;
 		case Request_RequestType_RELAYON:
 		case Request_RequestType_RELAYOFF:
 			response->Type = request.Command == Request_RequestType_RELAYON ? Response_ResponseType_RELAYON : Response_ResponseType_RELAYOFF;
-			
+		
 			if(Get_Profile_State() == STOP)
 				Set_Relay_State(request.Command == Request_RequestType_RELAYON);
-			
-			break;
+		
+		break;
 		case Request_RequestType_PING:
 			response->Type = Response_ResponseType_PING;
-			break;
-		
+		break;
+		case Request_RequestType_GETPID:
+			response->Type = Response_ResponseType_GETPID;
+			response->which_payload = Response_PidGains_tag;
+						
+			PidGains pid_gains = Get_Pid();
+
+			response->payload.PidGains.kp = pid_gains.kp;
+			response->payload.PidGains.ki = pid_gains.ki;
+			response->payload.PidGains.kd = pid_gains.kd;
+		break;
+		case Request_RequestType_SETPID:
+			response->Type = Response_ResponseType_SETPID;
+
+			Set_Pid((PidGains){request.PidGains.kp, request.PidGains.ki, request.PidGains.kd});
+		break;
 		default:
 			SetErrorResponse(response, Response_ErrorCodeType_UNKNOWNCOMMAND);
 		break;
@@ -241,6 +267,8 @@ int main(void)
 	
 	Init_Profile();
 	
+	Init_Pid();
+
 	while(1) {
 		
 		USB_USBTask();
@@ -257,9 +285,13 @@ int main(void)
 				ctx.profile_time++;
 			}
 			
-			OCR1A = pid(ctx.target_temp, ctx.tc_temp, TOP_MAX);
+			OCR1A = Update_Pid(ctx.target_temp, ctx.tc_temp, TOP_MAX);
 
 			recalc_pid = 0;
+
+			if(Get_Profile_State() == STOP)	{	
+				Stop_Cycle();
+			}
 		}
 	}
 }
@@ -299,8 +331,8 @@ void EVENT_USB_Device_Disconnect(void) {
 }
 
 /** Event handler for the USB_ConfigurationChanged event. This is fired when the host set the current configuration
- *  of the USB device after enumeration - the device endpoints are configured and the CDC management task started.
- */
+*  of the USB device after enumeration - the device endpoints are configured and the CDC management task started.
+*/
 void EVENT_USB_Device_ConfigurationChanged(void) {
 	bool ConfigSuccess = true;
 
@@ -317,48 +349,48 @@ void EVENT_USB_Device_ConfigurationChanged(void) {
 }
 
 /** Event handler for the USB_ControlRequest event. This is used to catch and process control requests sent to
- *  the device from the USB host before passing along unhandled control requests to the library for processing
- *  internally.
- */
+*  the device from the USB host before passing along unhandled control requests to the library for processing
+*  internally.
+*/
 void EVENT_USB_Device_ControlRequest(void)
 {
 	/* Process CDC specific control requests */
 	switch (USB_ControlRequest.bRequest)
 	{
 		case CDC_REQ_GetLineEncoding:
-			if (USB_ControlRequest.bmRequestType == (REQDIR_DEVICETOHOST | REQTYPE_CLASS | REQREC_INTERFACE))
-			{
-				Endpoint_ClearSETUP();
+		if (USB_ControlRequest.bmRequestType == (REQDIR_DEVICETOHOST | REQTYPE_CLASS | REQREC_INTERFACE))
+		{
+			Endpoint_ClearSETUP();
 
-				/* Write the line coding data to the control endpoint */
-				Endpoint_Write_Control_Stream_LE(&LineEncoding, sizeof(CDC_LineEncoding_t));
-				Endpoint_ClearOUT();
-			}
+			/* Write the line coding data to the control endpoint */
+			Endpoint_Write_Control_Stream_LE(&LineEncoding, sizeof(CDC_LineEncoding_t));
+			Endpoint_ClearOUT();
+		}
 
-			break;
+		break;
 		case CDC_REQ_SetLineEncoding:
-			if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE))
-			{
-				Endpoint_ClearSETUP();
+		if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE))
+		{
+			Endpoint_ClearSETUP();
 
-				/* Read the line coding data in from the host into the global struct */
-				Endpoint_Read_Control_Stream_LE(&LineEncoding, sizeof(CDC_LineEncoding_t));
-				Endpoint_ClearIN();
-			}
+			/* Read the line coding data in from the host into the global struct */
+			Endpoint_Read_Control_Stream_LE(&LineEncoding, sizeof(CDC_LineEncoding_t));
+			Endpoint_ClearIN();
+		}
 
-			break;
+		break;
 		case CDC_REQ_SetControlLineState:
-			if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE))
-			{
-				Endpoint_ClearSETUP();
-				Endpoint_ClearStatusStage();
+		if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE))
+		{
+			Endpoint_ClearSETUP();
+			Endpoint_ClearStatusStage();
 
-				/* NOTE: Here you can read in the line state mask from the host, to get the current state of the output handshake
-				         lines. The mask is read in from the wValue parameter in USB_ControlRequest, and can be masked against the
-						 CONTROL_LINE_OUT_* masks to determine the RTS and DTR line states using the following code:
-				*/
-			}
+			/* NOTE: Here you can read in the line state mask from the host, to get the current state of the output handshake
+			lines. The mask is read in from the wValue parameter in USB_ControlRequest, and can be masked against the
+			CONTROL_LINE_OUT_* masks to determine the RTS and DTR line states using the following code:
+			*/
+		}
 
-			break;
+		break;
 	}
 }

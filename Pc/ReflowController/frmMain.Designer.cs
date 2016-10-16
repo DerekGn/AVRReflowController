@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title4 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title5 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.tbStatus = new System.Windows.Forms.TextBox();
             this.btnGetTcStatus = new System.Windows.Forms.Button();
             this.btnRelayOn = new System.Windows.Forms.Button();
@@ -67,6 +67,14 @@
             this.tmrMain = new System.Windows.Forms.Timer(this.components);
             this.lblPreheat = new System.Windows.Forms.Label();
             this.nudPreheat = new System.Windows.Forms.NumericUpDown();
+            this.btnGetPid = new System.Windows.Forms.Button();
+            this.btnSetPid = new System.Windows.Forms.Button();
+            this.nudKp = new System.Windows.Forms.NumericUpDown();
+            this.lblK = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.nudKi = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.nudKd = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.chartMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStartRate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSoakTemp1)).BeginInit();
@@ -76,6 +84,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudTimeToPeak)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCoolRate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPreheat)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudKp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudKi)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudKd)).BeginInit();
             this.SuspendLayout();
             // 
             // tbStatus
@@ -84,7 +95,7 @@
             this.tbStatus.Multiline = true;
             this.tbStatus.Name = "tbStatus";
             this.tbStatus.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbStatus.Size = new System.Drawing.Size(760, 119);
+            this.tbStatus.Size = new System.Drawing.Size(680, 159);
             this.tbStatus.TabIndex = 1;
             // 
             // btnGetTcStatus
@@ -179,43 +190,43 @@
             // 
             this.chartMain.BackColor = System.Drawing.Color.WhiteSmoke;
             this.chartMain.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
-            chartArea4.AxisX.IsMarginVisible = false;
-            chartArea4.AxisX.MinorTickMark.Interval = 1D;
-            chartArea4.AxisX.Title = "Time";
-            chartArea4.AxisY.Title = "°C";
-            chartArea4.BackColor = System.Drawing.Color.Gainsboro;
-            chartArea4.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
-            chartArea4.CursorX.IsUserEnabled = true;
-            chartArea4.CursorX.IsUserSelectionEnabled = true;
-            chartArea4.Name = "ChartArea";
-            this.chartMain.ChartAreas.Add(chartArea4);
-            legend4.Name = "Legend";
-            this.chartMain.Legends.Add(legend4);
+            chartArea5.AxisX.IsMarginVisible = false;
+            chartArea5.AxisX.MinorTickMark.Interval = 1D;
+            chartArea5.AxisX.Title = "Time";
+            chartArea5.AxisY.Title = "°C";
+            chartArea5.BackColor = System.Drawing.Color.Gainsboro;
+            chartArea5.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            chartArea5.CursorX.IsUserEnabled = true;
+            chartArea5.CursorX.IsUserSelectionEnabled = true;
+            chartArea5.Name = "ChartArea";
+            this.chartMain.ChartAreas.Add(chartArea5);
+            legend5.Name = "Legend";
+            this.chartMain.Legends.Add(legend5);
             this.chartMain.Location = new System.Drawing.Point(12, 12);
             this.chartMain.Name = "chartMain";
-            series10.ChartArea = "ChartArea";
-            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series10.Legend = "Legend";
-            series10.LegendText = "Profile";
-            series10.Name = "Profile";
-            series11.ChartArea = "ChartArea";
-            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series11.Legend = "Legend";
-            series11.Name = "Actual";
-            series12.ChartArea = "ChartArea";
-            series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series12.Legend = "Legend";
-            series12.Name = "Target";
-            this.chartMain.Series.Add(series10);
-            this.chartMain.Series.Add(series11);
-            this.chartMain.Series.Add(series12);
+            series13.ChartArea = "ChartArea";
+            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series13.Legend = "Legend";
+            series13.LegendText = "Profile";
+            series13.Name = "Profile";
+            series14.ChartArea = "ChartArea";
+            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series14.Legend = "Legend";
+            series14.Name = "Actual";
+            series15.ChartArea = "ChartArea";
+            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series15.Legend = "Legend";
+            series15.Name = "Target";
+            this.chartMain.Series.Add(series13);
+            this.chartMain.Series.Add(series14);
+            this.chartMain.Series.Add(series15);
             this.chartMain.Size = new System.Drawing.Size(680, 355);
             this.chartMain.TabIndex = 12;
             this.chartMain.Text = "chart";
-            title4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            title4.Name = "Title";
-            title4.Text = "Reflow Controller Profile";
-            this.chartMain.Titles.Add(title4);
+            title5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            title5.Name = "Title";
+            title5.Text = "Reflow Controller Profile";
+            this.chartMain.Titles.Add(title5);
             // 
             // btnConnect
             // 
@@ -569,11 +580,102 @@
             0});
             this.nudPreheat.ValueChanged += new System.EventHandler(this.Profile_ValueChanged);
             // 
+            // btnGetPid
+            // 
+            this.btnGetPid.Location = new System.Drawing.Point(701, 430);
+            this.btnGetPid.Name = "btnGetPid";
+            this.btnGetPid.Size = new System.Drawing.Size(71, 23);
+            this.btnGetPid.TabIndex = 40;
+            this.btnGetPid.Text = "Get Pid";
+            this.btnGetPid.UseVisualStyleBackColor = true;
+            this.btnGetPid.Click += new System.EventHandler(this.btnGetPid_Click);
+            // 
+            // btnSetPid
+            // 
+            this.btnSetPid.Location = new System.Drawing.Point(701, 460);
+            this.btnSetPid.Name = "btnSetPid";
+            this.btnSetPid.Size = new System.Drawing.Size(71, 23);
+            this.btnSetPid.TabIndex = 41;
+            this.btnSetPid.Text = "Set Pid";
+            this.btnSetPid.UseVisualStyleBackColor = true;
+            this.btnSetPid.Click += new System.EventHandler(this.btnSetPid_Click);
+            // 
+            // nudKp
+            // 
+            this.nudKp.Location = new System.Drawing.Point(728, 490);
+            this.nudKp.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.nudKp.Name = "nudKp";
+            this.nudKp.Size = new System.Drawing.Size(44, 20);
+            this.nudKp.TabIndex = 42;
+            // 
+            // lblK
+            // 
+            this.lblK.AutoSize = true;
+            this.lblK.Location = new System.Drawing.Point(702, 494);
+            this.lblK.Name = "lblK";
+            this.lblK.Size = new System.Drawing.Size(20, 13);
+            this.lblK.TabIndex = 45;
+            this.lblK.Text = "Kp";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(702, 521);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(16, 13);
+            this.label1.TabIndex = 47;
+            this.label1.Text = "Ki";
+            // 
+            // nudKi
+            // 
+            this.nudKi.Location = new System.Drawing.Point(728, 517);
+            this.nudKi.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.nudKi.Name = "nudKi";
+            this.nudKi.Size = new System.Drawing.Size(44, 20);
+            this.nudKi.TabIndex = 46;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(702, 548);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(20, 13);
+            this.label2.TabIndex = 49;
+            this.label2.Text = "Kd";
+            // 
+            // nudKd
+            // 
+            this.nudKd.Location = new System.Drawing.Point(728, 544);
+            this.nudKd.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.nudKd.Name = "nudKd";
+            this.nudKd.Size = new System.Drawing.Size(44, 20);
+            this.nudKd.TabIndex = 48;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 561);
+            this.ClientSize = new System.Drawing.Size(784, 601);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.nudKd);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.nudKi);
+            this.Controls.Add(this.lblK);
+            this.Controls.Add(this.nudKp);
+            this.Controls.Add(this.btnSetPid);
+            this.Controls.Add(this.btnGetPid);
             this.Controls.Add(this.nudPreheat);
             this.Controls.Add(this.lblPreheat);
             this.Controls.Add(this.nudCoolRate);
@@ -619,6 +721,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudTimeToPeak)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCoolRate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPreheat)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudKp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudKi)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudKd)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -657,6 +762,14 @@
         private System.Windows.Forms.Timer tmrMain;
         private System.Windows.Forms.Label lblPreheat;
         private System.Windows.Forms.NumericUpDown nudPreheat;
+        private System.Windows.Forms.Button btnGetPid;
+        private System.Windows.Forms.Button btnSetPid;
+        private System.Windows.Forms.NumericUpDown nudKp;
+        private System.Windows.Forms.Label lblK;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown nudKi;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.NumericUpDown nudKd;
     }
 }
 

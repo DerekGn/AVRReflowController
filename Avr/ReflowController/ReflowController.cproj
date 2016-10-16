@@ -342,9 +342,6 @@
     <Compile Include="relay.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="shared.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="tc.c">
       <SubType>compile</SubType>
     </Compile>

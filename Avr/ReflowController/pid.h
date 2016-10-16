@@ -27,15 +27,29 @@
 
 #include <inttypes.h>
 
+typedef struct _PidGains {
+	int8_t kp;
+	int8_t ki;
+	int8_t kd;
+} PidGains;
+
+void Init_Pid();
+
+void Reset_Pid();
+
+void Set_Pid(PidGains new_pid_gains);
+
+PidGains Get_Pid();
+
 /**
- * \brief Calculate the duty cycle of timer1 PWM
+ * \brief Calculate the correction factor
  * 
  * \param target_temp The target temperature
  * \param current_temp The current temperature
- * \param max_top The maximum TOP value for timer1 PWM 
+ * \param max_out
  * 
  * \return uint16_t
  */
-uint16_t pid(uint16_t target_temp, uint16_t current_temp, uint16_t max_top);
+uint16_t Update_Pid(int16_t target_temp, int16_t current_temp, uint16_t max_out);
 
 #endif /* PID_H_ */

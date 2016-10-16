@@ -21,5 +21,7 @@ namespace ReflowController
         void Ping();
         ReflowProfile GetReflowProfile();
         void SetReflowProfile(ReflowProfile reflowProfile);
+        Pid GetPid();
+        void SetPid(Pid pid);
     }
 }

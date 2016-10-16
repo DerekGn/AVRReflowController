@@ -56,11 +56,11 @@ namespace ReflowController
             HandleOperation("Start Profile", () =>
             {
                 _reflowControllerDevice.StartProfile();
-
-                StartProfileUpdate();
-
+                
                 Invoke((MethodInvoker)(() =>
                 {
+                    StartProfileUpdate();
+
                     btnStop.Enabled = true;
                     btnStart.Enabled = false;
                     btnSetProfile.Enabled = false;
@@ -195,6 +195,39 @@ namespace ReflowController
                 }));
             });
         }
+        private void btnGetPid_Click(object sender, EventArgs e)
+        {
+            HandleOperation("Get Pid", () =>
+            {
+                Pid pidGains = _reflowControllerDevice.GetPid();
+
+                Invoke((MethodInvoker)(() =>
+                {
+                    tbStatus.AppendText($"Get Pid: Ok\r\n");
+
+                    nudKp.Value = pidGains.Kp;
+                    nudKi.Value = pidGains.Ki;
+                    nudKd.Value = pidGains.Kd;
+                }));
+            });
+        }
+        private void btnSetPid_Click(object sender, EventArgs e)
+        {
+            HandleOperation("Set Pid", () =>
+            {
+                _reflowControllerDevice.SetPid(new Pid()
+                {
+                    Kp = (int) nudKp.Value,
+                    Ki = (int) nudKi.Value,
+                    Kd = (int) nudKd.Value
+                });
+
+                Invoke((MethodInvoker)(() =>
+                {
+                    tbStatus.AppendText($"Set Pid: Ok\r\n");
+                }));
+            });
+        }
         private void frmMain_Load(object sender, EventArgs e)
         {
             cboPorts.Items.AddRange(SerialPortStream.GetPortNames());
@@ -249,7 +282,13 @@ namespace ReflowController
             chartMain.Series[0].Points.AddXY(peakX + (nudPeakTemp.Value / nudCoolRate.Value), 0);
             chartMain.Invalidate();
         }
-        private void HandleOperation(string operatiom, Action operation)
+
+        private void HandleOperation(string operationName, Action operation)
+        {
+            HandleOperation(operationName, operation, (e) => { });
+        }
+
+        private void HandleOperation(string operationName, Action operation, Action<Exception> errorOperation)
         {
             try
             {
@@ -259,15 +298,19 @@ namespace ReflowController
             {
                 Invoke((MethodInvoker)(() =>
                 {
-                    tbStatus.AppendText($"ReflowController {operatiom}: [{ex.Message}]\r\n");
+                    tbStatus.AppendText($"ReflowController {operationName}: [{ex.Message}]\r\n");
                 }));
+
+                errorOperation(ex);
             }
             catch (Exception ex)
             {
                 Invoke((MethodInvoker)(() =>
                 {
-                    tbStatus.AppendText($"ReflowController {operatiom}: [{ex.ToString()}]\r\n");
+                    tbStatus.AppendText($"ReflowController {operationName}: [{ex.ToString()}]\r\n");
                 }));
+
+                errorOperation(ex);
             }
         }
         private void MapFromReflowProfile(ReflowProfile reflowProfile)
