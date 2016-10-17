@@ -32,33 +32,33 @@ public static partial class CommandsReflection {
           "UmVmbG93UHJvZmlsZRIRCglTdGFydFJhdGUYASABKAUSEQoJU29ha1RlbXAx",
           "GAIgASgFEhEKCVNvYWtUZW1wMhgDIAEoBRIPCgdTb2FrTGVuGAQgASgFEhAK",
           "CFBlYWtUZW1wGAUgASgFEhIKClRpbWVUb1BlYWsYBiABKAUSEAoIQ29vbFJh",
-          "dGUYByABKAUSDwoHUHJlaGVhdBgIIAEoBSLMAQoMUHJvZmlsZVN0YWdlEi4K",
+          "dGUYByABKAUSDwoHUHJlaGVhdBgIIAEoBSLfAQoMUHJvZmlsZVN0YWdlEi4K",
           "BVN0YXRlGAEgASgOMh8uUHJvZmlsZVN0YWdlLlByb2ZpbGVTdGFnZVN0YXRl",
           "EhMKC1JlZmxvd1RpbWVyGAIgASgFEhIKClRhcmdldFRlbXAYAyABKAUSDgoG",
-          "VGNUZW1wGAQgASgFIlMKEVByb2ZpbGVTdGFnZVN0YXRlEggKBFNUT1AQABIJ",
-          "CgVTVEFSVBABEggKBFNPQUsQAhIICgRQRUFLEAMSCAoEQ09PTBAEEgsKB1BS",
-          "RUhFQVQQBSLsBAoIUmVzcG9uc2USJAoGUmVzdWx0GAEgASgOMhQuUmVzcG9u",
-          "c2UuUmVzdWx0VHlwZRIkCgRUeXBlGAIgASgOMhYuUmVzcG9uc2UuUmVzcG9u",
-          "c2VUeXBlEhEKB1RjU3RhdGUYAyABKAVIABIeCgVTdGFnZRgEIAEoCzINLlBy",
-          "b2ZpbGVTdGFnZUgAEiwKCUVycm9yQ29kZRgFIAEoDjIXLlJlc3BvbnNlLkVy",
-          "cm9yQ29kZVR5cGVIABIhCgdQcm9maWxlGAYgASgLMg4uUmVmbG93UHJvZmls",
-          "ZUgAEhgKCFBpZEdhaW5zGAcgASgLMgQuUGlkSAAiIwoKUmVzdWx0VHlwZRIL",
-          "CgdTVUNDRVNTEAASCAoERkFJTBABIrABCgxSZXNwb25zZVR5cGUSEAoMU1RB",
-          "UlRQUk9GSUxFEAASDwoLU1RPUFBST0ZJTEUQARITCg9HRVRQUk9GSUxFU1RB",
-          "R0UQAhIOCgpHRVRQUk9GSUxFEAMSDgoKU0VUUFJPRklMRRAEEgsKB1RDU1RB",
-          "VEUQBRILCgdSRUxBWU9OEAYSDAoIUkVMQVlPRkYQBxIICgRQSU5HEAgSCgoG",
-          "U0VUUElEEAoSCgoGR0VUUElEEAsiNQoLQ3ljbGVTdGF0dXMSCwoHUlVOTklO",
-          "RxAAEgsKB1NUT1BQRUQQARIMCghGSU5JU0hFRBACIlwKDUVycm9yQ29kZVR5",
-          "cGUSEgoOVU5LTk9XTkNPTU1BTkQQABIQCgxERUNPREVGQUlMRUQQARISCg5Q",
-          "Uk9GSUxFUlVOTklORxACEhEKDU9WRU5BQk9WRVRFTVAQA0IJCgdwYXlsb2Fk",
-          "YgZwcm90bzM="));
+          "VGNUZW1wGAQgASgFEhEKCUR1dHlDeWNsZRgFIAEoBSJTChFQcm9maWxlU3Rh",
+          "Z2VTdGF0ZRIICgRTVE9QEAASCQoFU1RBUlQQARIICgRTT0FLEAISCAoEUEVB",
+          "SxADEggKBENPT0wQBBILCgdQUkVIRUFUEAUi7AQKCFJlc3BvbnNlEiQKBlJl",
+          "c3VsdBgBIAEoDjIULlJlc3BvbnNlLlJlc3VsdFR5cGUSJAoEVHlwZRgCIAEo",
+          "DjIWLlJlc3BvbnNlLlJlc3BvbnNlVHlwZRIRCgdUY1N0YXRlGAMgASgFSAAS",
+          "HgoFU3RhZ2UYBCABKAsyDS5Qcm9maWxlU3RhZ2VIABIsCglFcnJvckNvZGUY",
+          "BSABKA4yFy5SZXNwb25zZS5FcnJvckNvZGVUeXBlSAASIQoHUHJvZmlsZRgG",
+          "IAEoCzIOLlJlZmxvd1Byb2ZpbGVIABIYCghQaWRHYWlucxgHIAEoCzIELlBp",
+          "ZEgAIiMKClJlc3VsdFR5cGUSCwoHU1VDQ0VTUxAAEggKBEZBSUwQASKwAQoM",
+          "UmVzcG9uc2VUeXBlEhAKDFNUQVJUUFJPRklMRRAAEg8KC1NUT1BQUk9GSUxF",
+          "EAESEwoPR0VUUFJPRklMRVNUQUdFEAISDgoKR0VUUFJPRklMRRADEg4KClNF",
+          "VFBST0ZJTEUQBBILCgdUQ1NUQVRFEAUSCwoHUkVMQVlPThAGEgwKCFJFTEFZ",
+          "T0ZGEAcSCAoEUElORxAIEgoKBlNFVFBJRBAKEgoKBkdFVFBJRBALIjUKC0N5",
+          "Y2xlU3RhdHVzEgsKB1JVTk5JTkcQABILCgdTVE9QUEVEEAESDAoIRklOSVNI",
+          "RUQQAiJcCg1FcnJvckNvZGVUeXBlEhIKDlVOS05PV05DT01NQU5EEAASEAoM",
+          "REVDT0RFRkFJTEVEEAESEgoOUFJPRklMRVJVTk5JTkcQAhIRCg1PVkVOQUJP",
+          "VkVURU1QEANCCQoHcGF5bG9hZGIGcHJvdG8z"));
     descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
         new pbr::FileDescriptor[] { },
         new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
           new pbr::GeneratedClrTypeInfo(typeof(global::Request), global::Request.Parser, new[]{ "Command", "Profile", "PidGains" }, null, new[]{ typeof(global::Request.Types.RequestType) }, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::Pid), global::Pid.Parser, new[]{ "Kp", "Ki", "Kd" }, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::ReflowProfile), global::ReflowProfile.Parser, new[]{ "StartRate", "SoakTemp1", "SoakTemp2", "SoakLen", "PeakTemp", "TimeToPeak", "CoolRate", "Preheat" }, null, null, null),
-          new pbr::GeneratedClrTypeInfo(typeof(global::ProfileStage), global::ProfileStage.Parser, new[]{ "State", "ReflowTimer", "TargetTemp", "TcTemp" }, null, new[]{ typeof(global::ProfileStage.Types.ProfileStageState) }, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::ProfileStage), global::ProfileStage.Parser, new[]{ "State", "ReflowTimer", "TargetTemp", "TcTemp", "DutyCycle" }, null, new[]{ typeof(global::ProfileStage.Types.ProfileStageState) }, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::Response), global::Response.Parser, new[]{ "Result", "Type", "TcState", "Stage", "ErrorCode", "Profile", "PidGains" }, new[]{ "Payload" }, new[]{ typeof(global::Response.Types.ResultType), typeof(global::Response.Types.ResponseType), typeof(global::Response.Types.CycleStatus), typeof(global::Response.Types.ErrorCodeType) }, null)
         }));
   }
@@ -276,11 +276,11 @@ public sealed partial class Request : pb::IMessage<Request> {
       /// </summary>
       [pbr::OriginalName("PING")] Ping = 9,
       /// <summary>
-      ///  Set the PID values
+      ///  Set the PID gain values
       /// </summary>
       [pbr::OriginalName("SETPID")] Setpid = 10,
       /// <summary>
-      ///  Get the PID values
+      ///  Get the PID gain values
       /// </summary>
       [pbr::OriginalName("GETPID")] Getpid = 11,
     }
@@ -796,6 +796,7 @@ public sealed partial class ProfileStage : pb::IMessage<ProfileStage> {
     reflowTimer_ = other.reflowTimer_;
     targetTemp_ = other.targetTemp_;
     tcTemp_ = other.tcTemp_;
+    dutyCycle_ = other.dutyCycle_;
   }
 
   public ProfileStage Clone() {
@@ -854,6 +855,19 @@ public sealed partial class ProfileStage : pb::IMessage<ProfileStage> {
     }
   }
 
+  /// <summary>Field number for the "DutyCycle" field.</summary>
+  public const int DutyCycleFieldNumber = 5;
+  private int dutyCycle_;
+  /// <summary>
+  ///  The duty cycle of the heater
+  /// </summary>
+  public int DutyCycle {
+    get { return dutyCycle_; }
+    set {
+      dutyCycle_ = value;
+    }
+  }
+
   public override bool Equals(object other) {
     return Equals(other as ProfileStage);
   }
@@ -869,6 +883,7 @@ public sealed partial class ProfileStage : pb::IMessage<ProfileStage> {
     if (ReflowTimer != other.ReflowTimer) return false;
     if (TargetTemp != other.TargetTemp) return false;
     if (TcTemp != other.TcTemp) return false;
+    if (DutyCycle != other.DutyCycle) return false;
     return true;
   }
 
@@ -878,6 +893,7 @@ public sealed partial class ProfileStage : pb::IMessage<ProfileStage> {
     if (ReflowTimer != 0) hash ^= ReflowTimer.GetHashCode();
     if (TargetTemp != 0) hash ^= TargetTemp.GetHashCode();
     if (TcTemp != 0) hash ^= TcTemp.GetHashCode();
+    if (DutyCycle != 0) hash ^= DutyCycle.GetHashCode();
     return hash;
   }
 
@@ -902,6 +918,10 @@ public sealed partial class ProfileStage : pb::IMessage<ProfileStage> {
       output.WriteRawTag(32);
       output.WriteInt32(TcTemp);
     }
+    if (DutyCycle != 0) {
+      output.WriteRawTag(40);
+      output.WriteInt32(DutyCycle);
+    }
   }
 
   public int CalculateSize() {
@@ -917,6 +937,9 @@ public sealed partial class ProfileStage : pb::IMessage<ProfileStage> {
     }
     if (TcTemp != 0) {
       size += 1 + pb::CodedOutputStream.ComputeInt32Size(TcTemp);
+    }
+    if (DutyCycle != 0) {
+      size += 1 + pb::CodedOutputStream.ComputeInt32Size(DutyCycle);
     }
     return size;
   }
@@ -936,6 +959,9 @@ public sealed partial class ProfileStage : pb::IMessage<ProfileStage> {
     }
     if (other.TcTemp != 0) {
       TcTemp = other.TcTemp;
+    }
+    if (other.DutyCycle != 0) {
+      DutyCycle = other.DutyCycle;
     }
   }
 
@@ -960,6 +986,10 @@ public sealed partial class ProfileStage : pb::IMessage<ProfileStage> {
         }
         case 32: {
           TcTemp = input.ReadInt32();
+          break;
+        }
+        case 40: {
+          DutyCycle = input.ReadInt32();
           break;
         }
       }
@@ -1384,11 +1414,11 @@ public sealed partial class Response : pb::IMessage<Response> {
       /// </summary>
       [pbr::OriginalName("PING")] Ping = 8,
       /// <summary>
-      ///  Set the PID values
+      ///  Set the PID gain values
       /// </summary>
       [pbr::OriginalName("SETPID")] Setpid = 10,
       /// <summary>
-      ///  Get the PID values
+      ///  Get the PID gain values
       /// </summary>
       [pbr::OriginalName("GETPID")] Getpid = 11,
     }

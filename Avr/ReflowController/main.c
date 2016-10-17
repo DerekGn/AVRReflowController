@@ -30,6 +30,7 @@ typedef struct _ReflowContext {
 	uint16_t profile_time;
 	uint16_t reflow_timer;
 	uint16_t target_temp;
+	uint16_t duty_cycle;
 	uint16_t tc_temp;
 	uint8_t update;
 } ReflowContext;
@@ -68,6 +69,7 @@ ProfileStage MapProfileStage(ProfileState profileState, ReflowContext ctx) {
 	profileStage.State = (ProfileStage_ProfileStageState)profileState;
 	profileStage.TargetTemp = ctx.target_temp;
 	profileStage.TcTemp = ctx.tc_temp;
+	profileStage.DutyCycle = ctx.duty_cycle;
 
 	return profileStage;
 }
@@ -95,7 +97,7 @@ ReflowProfile MapFromProfile(Profile profile) {
 	reflow_profile.SoakTemp2 = profile.soak_temp2;
 	reflow_profile.StartRate = profile.start_rate;
 	reflow_profile.TimeToPeak = profile.time_to_peak;
-
+	
 	return reflow_profile;
 }
 
@@ -285,7 +287,7 @@ int main(void)
 				ctx.profile_time++;
 			}
 			
-			OCR1A = Update_Pid(ctx.target_temp, ctx.tc_temp, TOP_MAX);
+			OCR1A = ctx.duty_cycle = Update_Pid(ctx.target_temp, ctx.tc_temp, TOP_MAX);
 
 			recalc_pid = 0;
 

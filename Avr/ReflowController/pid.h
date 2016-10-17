@@ -28,9 +28,9 @@
 #include <inttypes.h>
 
 typedef struct _PidGains {
-	int8_t kp;
-	int8_t ki;
-	int8_t kd;
+	uint8_t kp;
+	uint8_t ki;
+	uint8_t kd;
 } PidGains;
 
 void Init_Pid();

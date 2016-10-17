@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title5 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.tbStatus = new System.Windows.Forms.TextBox();
             this.btnGetTcStatus = new System.Windows.Forms.Button();
             this.btnRelayOn = new System.Windows.Forms.Button();
@@ -190,43 +190,43 @@
             // 
             this.chartMain.BackColor = System.Drawing.Color.WhiteSmoke;
             this.chartMain.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
-            chartArea5.AxisX.IsMarginVisible = false;
-            chartArea5.AxisX.MinorTickMark.Interval = 1D;
-            chartArea5.AxisX.Title = "Time";
-            chartArea5.AxisY.Title = "°C";
-            chartArea5.BackColor = System.Drawing.Color.Gainsboro;
-            chartArea5.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
-            chartArea5.CursorX.IsUserEnabled = true;
-            chartArea5.CursorX.IsUserSelectionEnabled = true;
-            chartArea5.Name = "ChartArea";
-            this.chartMain.ChartAreas.Add(chartArea5);
-            legend5.Name = "Legend";
-            this.chartMain.Legends.Add(legend5);
+            chartArea2.AxisX.IsMarginVisible = false;
+            chartArea2.AxisX.MinorTickMark.Interval = 1D;
+            chartArea2.AxisX.Title = "Time";
+            chartArea2.AxisY.Title = "°C";
+            chartArea2.BackColor = System.Drawing.Color.Gainsboro;
+            chartArea2.BackGradientStyle = System.Windows.Forms.DataVisualization.Charting.GradientStyle.TopBottom;
+            chartArea2.CursorX.IsUserEnabled = true;
+            chartArea2.CursorX.IsUserSelectionEnabled = true;
+            chartArea2.Name = "ChartArea";
+            this.chartMain.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend";
+            this.chartMain.Legends.Add(legend2);
             this.chartMain.Location = new System.Drawing.Point(12, 12);
             this.chartMain.Name = "chartMain";
-            series13.ChartArea = "ChartArea";
-            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series13.Legend = "Legend";
-            series13.LegendText = "Profile";
-            series13.Name = "Profile";
-            series14.ChartArea = "ChartArea";
-            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series14.Legend = "Legend";
-            series14.Name = "Actual";
-            series15.ChartArea = "ChartArea";
-            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series15.Legend = "Legend";
-            series15.Name = "Target";
-            this.chartMain.Series.Add(series13);
-            this.chartMain.Series.Add(series14);
-            this.chartMain.Series.Add(series15);
+            series4.ChartArea = "ChartArea";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Legend = "Legend";
+            series4.LegendText = "Profile";
+            series4.Name = "Profile";
+            series5.ChartArea = "ChartArea";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series5.Legend = "Legend";
+            series5.Name = "Actual";
+            series6.ChartArea = "ChartArea";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series6.Legend = "Legend";
+            series6.Name = "Target";
+            this.chartMain.Series.Add(series4);
+            this.chartMain.Series.Add(series5);
+            this.chartMain.Series.Add(series6);
             this.chartMain.Size = new System.Drawing.Size(680, 355);
             this.chartMain.TabIndex = 12;
             this.chartMain.Text = "chart";
-            title5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            title5.Name = "Title";
-            title5.Text = "Reflow Controller Profile";
-            this.chartMain.Titles.Add(title5);
+            title2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            title2.Name = "Title";
+            title2.Text = "Reflow Controller Profile";
+            this.chartMain.Titles.Add(title2);
             // 
             // btnConnect
             // 
@@ -465,12 +465,12 @@
             0});
             this.nudPeakTemp.Location = new System.Drawing.Point(701, 278);
             this.nudPeakTemp.Maximum = new decimal(new int[] {
-            255,
+            220,
             0,
             0,
             0});
             this.nudPeakTemp.Minimum = new decimal(new int[] {
-            200,
+            180,
             0,
             0,
             0});
@@ -604,7 +604,7 @@
             // 
             this.nudKp.Location = new System.Drawing.Point(728, 490);
             this.nudKp.Maximum = new decimal(new int[] {
-            300,
+            256,
             0,
             0,
             0});
@@ -634,7 +634,7 @@
             // 
             this.nudKi.Location = new System.Drawing.Point(728, 517);
             this.nudKi.Maximum = new decimal(new int[] {
-            300,
+            256,
             0,
             0,
             0});
@@ -655,7 +655,7 @@
             // 
             this.nudKd.Location = new System.Drawing.Point(728, 544);
             this.nudKd.Maximum = new decimal(new int[] {
-            300,
+            256,
             0,
             0,
             0});

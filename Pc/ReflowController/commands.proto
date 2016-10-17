@@ -13,8 +13,8 @@ message Request {
 		RELAYON									= 7;	// Switch on the relay
 		RELAYOFF								= 8;	// Switch off the relay
 		PING									= 9;	// Ping the device
-		SETPID									=10;	// Set the PID values
-		GETPID									=11;	// Get the PID values
+		SETPID									=10;	// Set the PID gain values
+		GETPID									=11;	// Get the PID gain values
 	}
 
 	RequestType Command							= 1;
@@ -54,6 +54,7 @@ message ProfileStage {
 	int32 				ReflowTimer				= 2;	// The current reflow profile time in seconds
 	int32 				TargetTemp				= 3;	// The calculated target temperature
 	int32 				TcTemp					= 4;	// The thermocouple temperature
+	int32 				DutyCycle				= 5;	// The duty cycle of the heater
 };
 
 message Response {
@@ -74,8 +75,8 @@ message Response {
 		RELAYON									= 6;	// Switch on the relay
 		RELAYOFF								= 7;	// Switch off the relay
 		PING									= 8;	// Pings the device
-		SETPID									=10;	// Set the PID values
-		GETPID									=11;	// Get the PID values
+		SETPID									=10;	// Set the PID gain values
+		GETPID									=11;	// Get the PID gain values
 	}
 
 	enum CycleStatus {

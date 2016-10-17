@@ -241,17 +241,19 @@ namespace ReflowController
             Invoke((MethodInvoker)(() =>
             {
                 var profileStage = _reflowControllerDevice.GetProfileStage();
+                
+                _lastReflowTimer = profileStage.ReflowTimer;
 
-                //if (profileStage.ReflowTimer > _lastReflowTimer)
-                //{
-                    _lastReflowTimer = profileStage.ReflowTimer;
+                chartMain.Series[1].Points.AddXY(profileStage.ReflowTimer, profileStage.TcTemp * 0.25);
+                chartMain.Series[2].Points.AddXY(profileStage.ReflowTimer, profileStage.TargetTemp * 0.25);
 
-                    chartMain.Series[1].Points.AddXY(profileStage.ReflowTimer, profileStage.TcTemp * 0.25);
-                    chartMain.Series[2].Points.AddXY(profileStage.ReflowTimer, profileStage.TargetTemp * 0.25);
-
-                    tbStatus.AppendText($"Get Profile Stage - Target Temp: [{profileStage.TargetTemp * 0.25} °C] Tc Temp: [{profileStage.TcTemp * 0.25} °C] " +
-                        $"State: [{profileStage.State}] Reflow Timer: [{profileStage.ReflowTimer}]\r\n");
-                //}
+                tbStatus.AppendText(string.Format("Get Profile Stage - Target Temp: [{0:N2} °C] Tc Temp: [{1:N2}] °C " +
+                    "State: [{2}] Reflow Timer: [{3}] Duty Cycle: [{4}]\r\n", 
+                    profileStage.TargetTemp * 0.25,
+                    profileStage.TcTemp * 0.25,
+                    profileStage.State,
+                    profileStage.ReflowTimer,
+                    profileStage.DutyCycle));
             }));
         }
         private void StartProfileUpdate()
@@ -270,16 +272,16 @@ namespace ReflowController
         private void UpdateReflowProfileGraph()
         {
             chartMain.Series[0].Points.Clear();
-
-            var soakStartX = nudSoakTemp1.Value / nudStartRate.Value;
-            var soakEndX = soakStartX + nudSoakLength.Value;
-            var peakX = soakEndX + nudTimeToPeak.Value;
+            
+            var soakStart = ((nudSoakTemp1.Value - nudPreheat.Value) / nudStartRate.Value);
+            var soakEnd = soakStart + nudSoakLength.Value;
+            var peak = soakEnd + nudTimeToPeak.Value;
 
             chartMain.Series[0].Points.AddXY(0, nudPreheat.Value);
-            chartMain.Series[0].Points.AddXY(soakStartX, nudSoakTemp1.Value);
-            chartMain.Series[0].Points.AddXY(soakEndX, nudSoakTemp2.Value);
-            chartMain.Series[0].Points.AddXY(peakX, nudPeakTemp.Value);
-            chartMain.Series[0].Points.AddXY(peakX + (nudPeakTemp.Value / nudCoolRate.Value), 0);
+            chartMain.Series[0].Points.AddXY(soakStart, nudSoakTemp1.Value);
+            chartMain.Series[0].Points.AddXY(soakEnd, nudSoakTemp2.Value);
+            chartMain.Series[0].Points.AddXY(peak, nudPeakTemp.Value);
+            chartMain.Series[0].Points.AddXY(peak + (nudPeakTemp.Value / nudCoolRate.Value), 0);
             chartMain.Invalidate();
         }
 
