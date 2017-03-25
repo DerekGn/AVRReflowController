@@ -383,7 +383,7 @@
             0,
             0});
             this.nudSoakTemp1.Minimum = new decimal(new int[] {
-            150,
+            80,
             0,
             0,
             0});
@@ -412,7 +412,7 @@
             0,
             0});
             this.nudSoakTemp2.Minimum = new decimal(new int[] {
-            150,
+            100,
             0,
             0,
             0});
@@ -470,7 +470,7 @@
             0,
             0});
             this.nudPeakTemp.Minimum = new decimal(new int[] {
-            180,
+            150,
             0,
             0,
             0});
